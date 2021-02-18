@@ -24,10 +24,10 @@ import org.springframework.context.annotation.FilterType;
 )
 public class AutoAppConfig {
 
-        @Bean(name = "memoryMemberReopsitory")
-        MemberRepository memberRepository(){
-                return new MemoryMemberReopsitory();
-        }
+//        @Bean(name = "memoryMemberReopsitory")
+//        MemberRepository memberRepository(){
+//                return new MemoryMemberReopsitory();
+//        }
 }
 
 
