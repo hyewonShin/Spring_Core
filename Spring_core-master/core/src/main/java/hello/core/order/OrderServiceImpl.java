@@ -1,33 +1,22 @@
 package hello.core.order;
 
+import hello.core.annotation.MainDiscountPolicy;
 import hello.core.discount.DiscountPolicy;
 import hello.core.member.Member;
 import hello.core.member.MemberRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
+//@RequiredArgsConstructor  // final이 붙은 생성자 생성 ( 많이 사용함 )
 public class OrderServiceImpl implements OrderService{
 
     private  MemberRepository memberRepository;
     private  DiscountPolicy discountPolicy;
 
     @Autowired
-    public void setMemberRepository(MemberRepository memberRepository) {
-        System.out.println("memberRepository = " + memberRepository);
-        this.memberRepository = memberRepository;
-    }
-
-    @Autowired
-    public void setDiscountPolicy(DiscountPolicy discountPolicy) {
-        System.out.println("discountPolicy = " + discountPolicy);
-        this.discountPolicy = discountPolicy;
-    }
-
-    // @Autowired : 생성자가 하나일 경우 생략해도 자동주입된다(물론 스프링빈에서만 해당).
-    public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
-        System.out.println("memberRepository = " + memberRepository);
-        System.out.println("discountPolicy = " + discountPolicy);
+    public OrderServiceImpl(MemberRepository memberRepository, @MainDiscountPolicy DiscountPolicy discountPolicy) {
         this.memberRepository = memberRepository;
         this.discountPolicy = discountPolicy;
     }
@@ -47,3 +36,14 @@ public class OrderServiceImpl implements OrderService{
 
 
 }
+
+// 최근에는 생선자를 딱 1개 두고, @Autowired 를 생략하는 방법을 주로 사용한다.
+// 여기에 Lombok 라이브러리의 @RequiredArgsConstructor 함께 사용하면 기능은
+// 다 제공하면서, 코드는 깔끔하게 사용할 수 있다.
+
+// 빈 이름이 중복될 때
+//1. @Autowired 는 타입 매칭을 시도하고, 이때 여러 빈이 있으면 필드 이름(파라미터 이름)으로
+// 빈 이름을 추가 매칭한다.
+
+//2. @Primary 는 우선순위를 정하는 방법이다. @Autowired 시에 여러 빈 매칭되면
+// @Primary 가 우선권을 가진다.
